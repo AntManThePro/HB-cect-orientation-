@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>HB-Q10 Standard Conquest — Hood Boss Academy</title>
+<meta name="theme-color" content="#00ff87" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="HB-Q10" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" href="icons/icon-192.png" />
+<link rel="apple-touch-icon" href="icons/icon-180.png" />
+<style>
+  :root{
+    --g:#00ff87; --c:#60efff; --p:#ff0080; --y:#ffcc00;
+    --bg:#050510; --panel:#0c1020; --line:rgba(96,239,255,.18);
+    --txt:#d8fff0; --dim:#7aa8a0;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.5 ui-sans-serif,system-ui,Segoe UI,Roboto,sans-serif}
+  body{min-height:100dvh;background-image:
+    radial-gradient(circle at 12% 8%, rgba(0,255,135,.08), transparent 32%),
+    radial-gradient(circle at 90% 0%, rgba(255,0,128,.07), transparent 28%),
+    linear-gradient(180deg,#050510,#07081a 60%,#050510)}
+  a{color:var(--c)}
+  header{
+    position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);
+    background:rgba(5,5,16,.82);border-bottom:1px solid var(--line);
+    display:flex;gap:12px;align-items:center;padding:10px 14px;
+  }
+  .logo{width:42px;height:42px;border-radius:10px;object-fit:cover;box-shadow:0 0 16px rgba(0,255,135,.35)}
+  .brand{font-weight:800;letter-spacing:.08em;color:var(--g);text-shadow:0 0 12px rgba(0,255,135,.45)}
+  .sub{font-size:11px;color:var(--c);letter-spacing:.16em;text-transform:uppercase}
+  nav{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+  nav button, .btn{
+    background:transparent;border:1px solid var(--line);color:var(--c);
+    padding:7px 10px;border-radius:999px;cursor:pointer;font-size:12px;letter-spacing:.06em
+  }
+  nav button.active, .btn.primary{border-color:var(--g);color:#03140c;background:var(--g);font-weight:800}
+  .btn.pink{border-color:var(--p);color:var(--p)}
+  .btn.yellow{border-color:var(--y);color:var(--y)}
+  main{max-width:1180px;margin:0 auto;padding:18px 14px 80px}
+  .hero h1{font-size:clamp(28px,6vw,58px);line-height:.95;margin:8px 0 12px;color:var(--g);text-shadow:0 0 24px rgba(0,255,135,.28)}
+  .hero p{max-width:720px;color:#b7e6d6}
+  .callout{
+    margin:16px 0;padding:14px 16px;border-left:4px solid var(--y);
+    background:rgba(255,204,0,.06);border-radius:0 12px 12px 0;color:#ffe9a6
+  }
+  .grid{display:grid;gap:12px}
+  .cards{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+  .card{
+    background:linear-gradient(180deg,rgba(12,16,32,.95),rgba(8,10,22,.95));
+    border:1px solid var(--line);border-radius:16px;padding:14px;min-height:120px;
+    box-shadow:0 0 0 1px rgba(0,255,135,.04), 0 10px 30px rgba(0,0,0,.35)
+  }
+  .card h3{margin:0 0 6px;color:var(--c);font-size:14px;letter-spacing:.08em;text-transform:uppercase}
+  .k{color:var(--p);font-weight:800}
+  .g{color:var(--g)}
+  .y{color:var(--y)}
+  section{display:none;animation:in .35s ease}
+  section.on{display:block}
+  @keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  canvas{width:100%;height:220px;border-radius:12px;border:1px solid var(--line);background:#070814;display:block}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+  th{color:var(--c);font-size:11px;letter-spacing:.08em}
+  .track{position:relative;padding-left:22px;margin:10px 0 18px}
+  .track::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:linear-gradient(var(--g),var(--c),var(--p))}
+  .step{position:relative;margin:0 0 12px;padding:10px 12px;background:rgba(0,0,0,.28);border:1px solid var(--line);border-radius:12px}
+  .step::before{content:"";position:absolute;left:-19px;top:16px;width:10px;height:10px;border-radius:50%;background:var(--g);box-shadow:0 0 10px var(--g)}
+  .step.mid::before{background:var(--c)}
+  .step.late::before{background:var(--p)}
+  .checks label{display:flex;gap:8px;align-items:flex-start;margin:6px 0;cursor:pointer}
+  textarea,input[type=text]{width:100%;background:#070814;border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:10px;font:13px/1.4 ui-monospace,Menlo,monospace}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  footer{color:var(--dim);font-size:12px;padding:24px 14px;text-align:center}
+  .meter{height:8px;background:#151826;border-radius:99px;overflow:hidden}
+  .meter>i{display:block;height:100%;background:linear-gradient(90deg,var(--p),var(--y),var(--g));width:18%}
+  .tag{display:inline-block;padding:2px 8px;border-radius:99px;border:1px solid var(--line);font-size:11px;margin:2px}
+  .ok{color:#03140c;background:var(--g);border-color:var(--g)}
+  .no{color:#3a0018;background:var(--p);border-color:var(--p)}
+  .warn{color:#2a2200;background:var(--y);border-color:var(--y)}
+  @media(max-width:640px){
+    nav{width:100%;margin-left:0}
+    header{flex-wrap:wrap}
+  }
+  @media print{
+    nav,.no-print,canvas{display:none!important}
+    section{display:block!important}
+    body{background:#fff;color:#111}
+    .hero h1,.brand,.card h3{color:#0a3;text-shadow:none}
+  }
+</style>
+</head>
+<body>
+<header>
+  <img class="logo" src="icons/icon-192.png" alt="HB-Q10" />
+  <div>
+    <div class="brand">HOOD BOSS · HB-Q10</div>
+    <div class="sub">Field Evidence Standard · Conquest Map</div>
+  </div>
+  <nav>
+    <button class="active" data-tab="truth">Truth</button>
+    <button data-tab="gap">The Gap</button>
+    <button data-tab="tracks">5 Tracks</button>
+    <button data-tab="standard">Draft Q10</button>
+    <button data-tab="actions">90 Days</button>
+    <button data-tab="letters">Letters</button>
+  </nav>
+</header>
+<main>
+<section id="truth" class="on">
+  <div class="hero">
+    <div class="sub">NEXUS // LIVE · AntManThePro</div>
+    <h1>You don’t replace IKECA.<br>You own the proof they don’t test.</h1>
+    <p>
+      <a href="https://hbacademy.netlify.app/" target="_blank" rel="noopener">hbacademy.netlify.app</a>
+      is a real field-training system. It is <b>not</b> an industry standard, not a personnel certification,
+      and not something a fire marshal is required to accept. That is the starting condition — not an insult.
+    </p>
+  </div>
+  <div class="callout">
+    NFPA 96 already owns fire protection and “trained, qualified, certified person acceptable to the AHJ.”
+    ANSI/IKECA C10 / I10 / M10 already own cleaning, inspection, and end-user maintenance methodology.
+    IKECA CECT / CECS / CESI already own the written credential most AHJs recognize.
+    Fighting those documents is how you lose a decade. Filling the hole they left is how you become unavoidable.
+  </div>
+  <div class="grid cards">
+    <div class="card">
+      <h3>What IKECA exams test</h3>
+      <p>100-item multiple choice. Codes, components, chemicals, solid fuel, safety theory. Pass 70% (CECT) or 75% (CESI). Two hours. English/Spanish. Proctored online.</p>
+    </div>
+    <div class="card">
+      <h3>What they do <span class="k">not</span> test</h3>
+      <p>Before/after photo pairs. Timestamp integrity. Photo reuse. Fan hinge proof. Roof contamination. QA scoring of a live job package. Field sign-off gates. Fraud patterns.</p>
+    </div>
+    <div class="card">
+      <h3>What Hood Boss already built</h3>
+      <p>Path-specific academy (L1–L3 + cert readiness). Photo discipline. Documentation habits. QA inspection logic. Field sign-off. That is the gap product. Name it HB-Q10 and stop calling it “the test that should replace theirs.”</p>
+    </div>
+    <div class="card">
+      <h3>Already in the room</h3>
+      <p>My Tech Pix is an IKECA Strategic Partner. Contact on IKECA’s partner page: <b>jeff@thehoodboss.com</b>. That door exists. Use it for CEU recognition and Education Committee insertion — not for a coup.</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <h3>Industry power map — live</h3>
+    <canvas id="map" height="220"></canvas>
+    <p class="sub" style="margin-top:8px">Particles = jobs. Nodes = who currently gets to say “this work counts.” Click a node.</p>
+    <div id="nodeInfo" class="callout">Click NFPA, IKECA, AHJ, Insurer, Buyer, or HB-Q10.</div>
+  </div>
+</section>
+
+<section id="gap">
+  <h1 class="g">The only winnable standard</h1>
+  <p>HB-Q10 = <b>Field Evidence, Photo Discipline, and QA Sign-Off</b>. Complementary overlay. Never a C10 fork.</p>
+  <div class="card" style="overflow:auto">
+    <table>
+      <thead><tr><th>Layer</th><th>Who owns it today</th><th>HB Academy role</th><th>Do this</th></tr></thead>
+      <tbody>
+        <tr><td>Fire code / system design</td><td>NFPA 96</td><td>Awareness only</td><td>Cite. Never rewrite.</td></tr>
+        <tr><td>How to clean / inspect / maintain</td><td>ANSI/IKECA C10, I10, M10</td><td>Teach to those texts</td><td>Align language to “bare metal.”</td></tr>
+        <tr><td>Written personnel credential</td><td>IKECA CECT / CECS / CESI</td><td>Prep path (L5)</td><td>Send techs to IKECA. Don’t compete.</td></tr>
+        <tr><td>Alternate written compliance exam</td><td>PWNA KEC exam (75%, 2-yr)</td><td>Aware, not enemy</td><td>Optional dual-track later.</td></tr>
+        <tr><td>Who is “acceptable to AHJ”</td><td>Local fire marshal</td><td>Evidence pack they can scan in 90 seconds</td><td>Pilot 3 AHJs with Q10 packages.</td></tr>
+        <tr><td>Vendor qualification</td><td>Chains, insurers, GCs</td><td>Required job package schema</td><td>Write Q10 into contracts.</td></tr>
+        <tr><td class="k">Proof the job happened</td><td class="k">NOBODY</td><td class="g">This is the standard</td><td class="g">Own it.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="grid cards" style="margin-top:12px">
+    <div class="card"><h3>Allowed claims now</h3><p><span class="tag ok">company standard</span> <span class="tag ok">supports NFPA 96 awareness</span> <span class="tag ok">supports ANSI/IKECA awareness</span> <span class="tag ok">inspectable job package</span></p></div>
+    <div class="card"><h3>Forbidden claims</h3><p><span class="tag no">ANSI certified</span> <span class="tag no">IKECA certified</span> <span class="tag no">NFPA certified</span> <span class="tag no">industry standard</span> <span class="tag no">required by fire code</span></p></div>
+    <div class="card"><h3>IKECA’s own words</h3><p>IKECA does not provide entry training and does not endorse KEC training programs. That is a wall and an opening: they need field partners who already teach C10/NFPA and produce evidence.</p></div>
+  </div>
+</section>
+
+<section id="tracks">
+  <h1 class="g">Five tracks. Run them in parallel.</h1>
+  <p>Standards are political machines with checklists. You do not “submit the test.” You occupy every layer that currently decides what a finished hood job looks like.</p>
+
+  <div class="track">
+    <div class="step">
+      <b class="g">TRACK 1 — Company law · week 1</b>
+      <p>Make HB-Q10 the only acceptable package inside Hood Boss. Academy completion required before unsupervised work. QA Brain scores every job. Incomplete package = job not closed, not “we’ll coach later.” This is how a standard is born: someone with payroll power refuses to pay for missing proof.</p>
+    </div>
+    <div class="step">
+      <b class="g">TRACK 2 — Buyer / insurer gravity · 30–180 days</b>
+      <p>A standard becomes real when a check writer requires it. Target: 3 restaurant groups, 1 insurance loss-control contact, 1 GC that specs hood work. Language: “Vendor shall submit an HB-Q10 evidence package (or equivalent photo/timestamp schema covering the 15 required categories).”</p>
+    </div>
+    <div class="step mid">
+      <b class="c">TRACK 3 — IKECA insertion · 3–18 months</b>
+      <p>Do not ask them to retire CECT. Ask for: (1) Academy modules listed as CEU-eligible for renewal, (2) Strategic Partner / Education Committee presentation on field-evidence failures CECT does not catch, (3) joint language that CECT = knowledge, Q10 = proof. Use the existing My Tech Pix partner channel. Email: info@ikeca.org + jeff@thehoodboss.com.</p>
+    </div>
+    <div class="step mid">
+      <b class="c">TRACK 4 — Accredited certificate program · 12–24 months</b>
+      <p>ANSI/ASTM E2659 via ANAB is for <i>training certificates</i>, not “this person is a certified technician.” Requirements: program already running with real learners, item analysis, learning objectives, evaluation data. You cannot accredit a slide deck. Pilot N techs, keep scores, then apply. This lets you say “ANAB-accredited certificate program” — still not ISO 17024 personnel cert.</p>
+    </div>
+    <div class="step late">
+      <b class="k">TRACK 5 — Personnel cert or new ANS · 2–5 years</b>
+      <p>ISO/IEC 17024 personnel certification body: job analysis, impartial scheme committee, exam security, appeals, surveillance. Cost band commonly $15k–$40k+ accreditation plus scheme build; 12–18 months after the program is already live. Creating a new American National Standard requires becoming an ANSI-Accredited Standards Developer first (~$5k application + membership + procedures + balanced consensus body). Only do this for a <i>new</i> document titled like “Field Evidence Requirements for Commercial Kitchen Exhaust Cleaning.” Never a rival C10.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Money and time — no fairy tale</h3>
+    <table>
+      <tr><th>Move</th><th>Cost order</th><th>Time</th><th>What you may then say</th></tr>
+      <tr><td>Company SOP + Academy mandate</td><td>sweat</td><td>this week</td><td>Required by Hood Boss</td></tr>
+      <tr><td>Buyer contract clause</td><td>legal review</td><td>1–6 mo</td><td>Required by [named buyer]</td></tr>
+      <tr><td>IKECA CEU listing</td><td>low + relationship</td><td>3–12 mo</td><td>Accepted for IKECA renewal CEUs</td></tr>
+      <tr><td>ASTM E2659 certificate</td><td>mid five figures typical</td><td>12–24 mo</td><td>Accredited certificate program</td></tr>
+      <tr><td>ISO 17024 personnel CB</td><td>$15k–$40k+ plus ops</td><td>12–18 mo after live</td><td>Accredited certification of persons</td></tr>
+      <tr><td>ANSI ASD + new ANS</td><td>$5k app + years of committee</td><td>2–5 yr</td><td>American National Standard (new gap doc)</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="standard">
+  <h1 class="g">HB-Q10 draft — the actual test</h1>
+  <p>Full text ships in <code>HB-Q10-DRAFT.md</code>. This is the kernel the Academy must grade against.</p>
+  <div class="grid cards">
+    <div class="card">
+      <h3>15 required photo categories</h3>
+      <ol style="margin:8px 0 0;padding-left:18px;font-size:13px">
+        <li>Arrival / protection</li><li>Hood before</li><li>Filters before</li>
+        <li>Duct before</li><li>Fan before</li><li>Roof before</li>
+        <li>Hood after</li><li>Filters after</li><li>Duct after</li>
+        <li>Fan after</li><li>Roof after</li><li>Panels labeled</li>
+        <li>Cleanup</li><li>Deficiencies or written none</li><li>Sticker / tag</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Integrity fails</h3>
+      <p>Clock drift. After-before sequence. Recycled photos. 25 shots in 5 minutes. Missing fan. Missing pair. Grease left in customer area. Unsafe ladder. Any one of these is not a coaching moment. It is an incomplete job.</p>
+    </div>
+    <div class="card">
+      <h3>Score weights</h3>
+      <p>Safety 30 · Documentation 30 · Quality 25 · Compliance 15.<br>
+      90+ Approve · 80–89 Coach · 70–79 Review · 50–69 Reject · &lt;50 Escalate.</p>
+    </div>
+    <div class="card">
+      <h3>Levels vs IKECA</h3>
+      <p>L1 New tech package. L2 Full system + deficiencies. L3 Lead gates. L4 QA calibration ±5 pts. L5 = L2/L3 quality <b>plus</b> IKECA written prep. Academy never pretends to be CECT.</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <h3>Live package scorer — sandbox</h3>
+    <p>Toggle what a sample job included. Watch the verdict change. This is the product AHJs understand.</p>
+    <div class="checks" id="scoreChecks"></div>
+    <div class="row">
+      <div class="card" style="flex:1;min-width:180px"><h3>Final</h3><div id="finalScore" style="font-size:42px;color:var(--g)">—</div><div class="meter"><i id="bar"></i></div></div>
+      <div class="card" style="flex:2;min-width:220px"><h3>Verdict</h3><p id="verdict">Flip categories.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="actions">
+  <h1 class="g">90-day compiler</h1>
+  <p>Check what you actually did. Export a payload. This is field ops, not a vision board.</p>
+  <div class="checks" id="todo"></div>
+  <div class="meter" style="margin:12px 0"><i id="todoBar"></i></div>
+  <p><span id="todoPct">0</span>% of the only 90 days that matter.</p>
+  <div class="row no-print">
+    <button class="btn primary" id="exportBtn">Export conquest payload</button>
+    <button class="btn yellow" onclick="window.print()">Print / Save PDF</button>
+    <button class="btn pink" id="resetBtn">Reset checks</button>
+    <button class="btn" id="installBtn">Install on home screen</button>
+  </div>
+  <textarea id="payload" rows="10" placeholder="Payload lands here."></textarea>
+</section>
+
+<section id="letters">
+  <h1 class="g">Letters that don’t get you laughed out</h1>
+  <div class="card">
+    <h3>IKECA Education / HQ</h3>
+    <pre style="white-space:pre-wrap;font-size:13px;color:#c9ffe8">Subject: Field-evidence CEU modules complementary to CECT — request for review
+
+We are not asking IKECA to endorse a competing credential.
+
+NFPA 96 and ANSI/IKECA C10 define what “clean” means. CECT tests whether a person can talk about that correctly. Callbacks, insurance disputes, and AHJ distrust are now driven by something else: job packages that cannot prove the work.
+
+Hood Boss Academy is a field-training system that grades photo discipline, timestamp integrity, deficiency tagging, and QA sign-off against a company standard we are circulating as HB-Q10. It cites C10/NFPA. It does not replace them.
+
+Request:
+1. Review attached module outlines for IKECA CEU eligibility on certification renewal.
+2. 20-minute Education Committee slot on “evidence failures CECT does not catch.”
+3. Written confirmation of any language we must keep so we never imply IKECA certification.
+
+Point of contact already in the partner ecosystem: My Tech Pix / jeff@thehoodboss.com
+Academy: https://hbacademy.netlify.app/
+</pre>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <h3>AHJ / Fire Marshal (local pilot)</h3>
+    <pre style="white-space:pre-wrap;font-size:13px;color:#c9ffe8">Subject: Request to pilot an inspectable KEC evidence package in [jurisdiction]
+
+NFPA 96 requires cleaning by a trained, qualified, certified person acceptable to the AHJ. We are not asking you to invent a new credential.
+
+We are asking you to look at 10 real job packages produced under HB-Q10 (15 photo categories, timestamp rules, deficiency tags, QA score). If the package lets your inspector confirm access was opened, the fan was cleaned, and deficiencies were written down in under two minutes, we will keep using it. If it does not, we will change it.
+
+This is offered as evidence of workmanship, not as a substitute for IKECA or for your authority.
+</pre>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <h3>Buyer / insurer vendor clause (paste-ready)</h3>
+    <pre style="white-space:pre-wrap;font-size:13px;color:#c9ffe8">Vendor shall perform Type I exhaust cleaning in accordance with NFPA 96 and ANSI/IKECA C10. In addition, Vendor shall submit an HB-Q10 Field Evidence Package (or a buyer-approved equivalent) for each service visit, including matched before/after photographs of hood, filters, accessible duct, fan, and roof/discharge; timestamped capture; written deficiencies or an explicit “none found”; and a QA completeness score. Missing required categories constitutes incomplete service and is not billable until cured.
+</pre>
+  </div>
+</section>
+</main>
+<footer>
+  HB-Q10 Draft 0.1 · Complements NFPA 96 + ANSI/IKECA · Does not replace them · NEXUS Portfolio · DoubleA @ AntManThePro<br>
+  Save to home screen. The icon is the hex seal. The work is the package.
+</footer>
+<script>
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+$$("nav button").forEach(b => b.onclick = () => {
+  $$("nav button").forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+  $$("main > section").forEach(s => s.classList.toggle("on", s.id === b.dataset.tab));
+});
+
+const nodes = [
+  {id:"NFPA", x:.14, y:.42, c:"#60efff", t:"Owns the fire code. You cite it. You do not author it."},
+  {id:"IKECA", x:.34, y:.28, c:"#00ff87", t:"Owns C10/I10/M10 + CECT/CECS/CESI. Partner, don’t raid."},
+  {id:"AHJ", x:.55, y:.22, c:"#ffcc00", t:"Local last word on ‘acceptable person.’ Pilot packages here."},
+  {id:"INSURER", x:.72, y:.38, c:"#ff0080", t:"Pays claims. Will require proof schemas before associations do."},
+  {id:"BUYER", x:.62, y:.68, c:"#60efff", t:"Writes the PO. One chain clause beats a hundred LinkedIn posts."},
+  {id:"HB-Q10", x:.28, y:.72, c:"#00ff87", t:"Your node. Proof layer. Only winnable standard."}
+];
+const links = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,1],[5,2],[0,5]];
+const cvs = $("#map"), ctx = cvs.getContext("2d");
+let W=0,H=0, parts=[];
+function resize(){
+  const r = cvs.getBoundingClientRect();
+  W = cvs.width = Math.floor(r.width * devicePixelRatio);
+  H = cvs.height = Math.floor(220 * devicePixelRatio);
+  ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+}
+resize(); addEventListener("resize", resize);
+for(let i=0;i<80;i++) parts.push({t:Math.random(), e:i%links.length, s: .4+Math.random()});
+cvs.onclick = ev => {
+  const r = cvs.getBoundingClientRect();
+  const x = (ev.clientX-r.left)/r.width, y = (ev.clientY-r.top)/r.height;
+  let hit = nodes.reduce((a,n)=> {
+    const d = Math.hypot(n.x-x,n.y-y); return d<.08 && d<(a.d??9) ? {d,n} : a;
+  }, {d:9,n:null});
+  if(hit.n) $("#nodeInfo").textContent = hit.n.id + " — " + hit.n.t;
+};
+function loop(ts){
+  const w = cvs.clientWidth, h = 220;
+  ctx.clearRect(0,0,w,h);
+  ctx.strokeStyle = "rgba(96,239,255,.18)";
+  links.forEach(([a,b])=>{
+    ctx.beginPath(); ctx.moveTo(nodes[a].x*w, nodes[a].y*h); ctx.lineTo(nodes[b].x*w, nodes[b].y*h); ctx.stroke();
+  });
+  parts.forEach(p=>{
+    p.t += 0.004*p.s; if(p.t>1) p.t=0;
+    const [a,b] = links[p.e];
+    const x = (nodes[a].x + (nodes[b].x-nodes[a].x)*p.t)*w;
+    const y = (nodes[a].y + (nodes[b].y-nodes[a].y)*p.t)*h;
+    ctx.fillStyle = nodes[b].c; ctx.beginPath(); ctx.arc(x,y,1.6,0,6.28); ctx.fill();
+  });
+  nodes.forEach(n=>{
+    ctx.shadowBlur = 16; ctx.shadowColor = n.c;
+    ctx.fillStyle = n.c; ctx.beginPath(); ctx.arc(n.x*w,n.y*h,7,0,6.28); ctx.fill();
+    ctx.shadowBlur = 0; ctx.fillStyle = "#d8fff0"; ctx.font = "11px ui-sans-serif";
+    ctx.fillText(n.id, n.x*w+10, n.y*h+4);
+  });
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+const cats = [
+  ["Arrival / protection", 6],["Hood before",8],["Filters before",7],["Duct before",8],
+  ["Fan before",10],["Roof before",7],["Hood after",8],["Filters after",7],
+  ["Duct after",8],["Fan after",10],["Roof after",7],["Panels labeled",6],
+  ["Cleanup",6],["Deficiencies written",8],["Sticker / tag",4]
+];
+const box = $("#scoreChecks");
+cats.forEach((c,i)=>{
+  const l = document.createElement("label");
+  l.innerHTML = `<input type="checkbox" data-i="${i}" checked> ${c[0]} <span class="tag">+${c[1]}</span>`;
+  box.appendChild(l);
+});
+const flags = document.createElement("label");
+flags.innerHTML = `<input type="checkbox" id="fraud"> Recycled / burst photos (AUTO FAIL)`;
+box.appendChild(flags);
+function score(){
+  const on = $$("#scoreChecks input[data-i]:checked").map(x=>+x.dataset.i);
+  let raw = on.reduce((s,i)=>s+cats[i][1],0);
+  const max = cats.reduce((s,c)=>s+c[1],0);
+  let final = Math.round(100*raw/max);
+  const missingFan = !(on.includes(4)&&on.includes(9));
+  const missingPair = !(on.includes(1)&&on.includes(6));
+  const fraud = $("#fraud").checked;
+  let v = "APPROVE", col = "var(--g)";
+  if(fraud || missingFan || missingPair){ final = Math.min(final,48); v = "ESCALATE IMMEDIATELY"; col="var(--p)"; }
+  else if(final<50) v="ESCALATE IMMEDIATELY", col="var(--p)";
+  else if(final<70) v="REJECT AND RETURN", col="var(--p)";
+  else if(final<80) v="MANAGEMENT REVIEW REQUIRED", col="var(--y)";
+  else if(final<90) v="APPROVE WITH COACHING", col="var(--c)";
+  $("#finalScore").textContent = final;
+  $("#finalScore").style.color = col;
+  $("#bar").style.width = final+"%";
+  $("#verdict").innerHTML = `<b style="color:${col}">${v}</b><br>Missing fan pair: ${missingFan} · Missing hood pair: ${missingPair} · Fraud flag: ${fraud}`;
+}
+box.addEventListener("change", score); score();
+
+const todos = [
+  "Freeze HB-Q10 v0.1 as internal SOP. Academy is the teaching surface, Q10 is the law.",
+  "Strip any UI copy that could be read as IKECA/NFPA/ANSI certification.",
+  "Map every Academy module to a Q10 category or integrity rule. Kill orphan slides.",
+  "Calibrate 20 gold-standard job packages. QA reviewers must land ±5 points.",
+  "Require L1 completion before a new tech works unsupervised.",
+  "Add the 15-category checklist to the live job app / My Tech Pix flow.",
+  "Pick 3 buyers. Send the vendor clause. Track yes/no, not vibes.",
+  "Pick 1 local AHJ. Walk in with 10 printed packages, not a pitch deck.",
+  "Send the IKECA letter via the existing partner channel.",
+  "Log every Academy completion with name, date, path, score — E2659 needs this later.",
+  "Write impartiality + appeals one-pagers even if you are still a company cert.",
+  "Decide who sits on a future scheme committee (competitor + AHJ + insurer + tech + owner)."
+];
+const todoEl = $("#todo");
+const saved = JSON.parse(localStorage.getItem("hbq10-todo")||"[]");
+todos.forEach((t,i)=>{
+  const l = document.createElement("label");
+  l.innerHTML = `<input type="checkbox" data-t="${i}" ${saved.includes(i)?"checked":""}> ${t}`;
+  todoEl.appendChild(l);
+});
+function syncTodo(){
+  const on = $$("#todo input:checked").map(x=>+x.dataset.t);
+  localStorage.setItem("hbq10-todo", JSON.stringify(on));
+  const pct = Math.round(100*on.length/todos.length);
+  $("#todoBar").style.width = pct+"%";
+  $("#todoPct").textContent = pct;
+}
+todoEl.addEventListener("change", syncTodo); syncTodo();
+$("#resetBtn").onclick = () => { localStorage.removeItem("hbq10-todo"); location.reload(); };
+$("#exportBtn").onclick = () => {
+  const on = $$("#todo input:checked").map(x=>+x.dataset.t);
+  const payload = {
+    artifact: "HB-Q10-CONQUEST",
+    owner: "DoubleA @ AntManThePro",
+    academy: "https://hbacademy.netlify.app/",
+    claim_allowed: ["company standard","NFPA/IKECA awareness","inspectable package"],
+    claim_forbidden: ["ANSI certified","IKECA certified","NFPA certified","industry standard"],
+    tracks: ["SOP","buyer clause","IKECA CEU","E2659 certificate","17024 or new ANS"],
+    done: on.map(i=>todos[i]),
+    remaining: todos.filter((_,i)=>!on.includes(i)),
+    next_emails: ["info@ikeca.org","jeff@thehoodboss.com"],
+    ts: new Date().toISOString()
+  };
+  $("#payload").value = JSON.stringify(payload,null,2);
+  navigator.clipboard?.writeText($("#payload").value);
+};
+let deferred;
+addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferred = e; });
+$("#installBtn").onclick = async () => {
+  if(deferred){ deferred.prompt(); deferred = null; }
+  else alert("On iPhone: Share → Add to Home Screen. On desktop Chrome: Install app from the address bar.");
+};
+if("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(()=>{});
+</script>
+</body>
+</html>
